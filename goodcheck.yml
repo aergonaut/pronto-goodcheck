@@ -2,3 +2,5 @@ rules:
   - id: Spelling/GitHub
     pattern: Github
     message: Spell GitHub with a capital H
+    justification:
+      - If this is a Ruby class/module name

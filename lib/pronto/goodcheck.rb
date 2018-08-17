@@ -4,6 +4,8 @@ require "goodcheck"
 require "pathname"
 require "json"
 
+# Github
+
 module Pronto
   class GoodcheckRunner < Runner
     def run
@@ -44,9 +46,13 @@ module Pronto
 
     def new_message(line, issue)
       path = issue["path"]
-      message = issue["message"]
+      message = "#{issue["message"]}"
       if issue["justifications"].any?
-        message << "\n\nJustifications\n\n#{issue["justifications"]}"
+        justifications = ""
+        issue["justifications"].each do |justification|
+          justifications << "\n* #{justification}"
+        end
+        message << "\n\nJustifications:\n#{justifications}"
       end
 
       Message.new(path, line, :info, message, nil, self.class)
