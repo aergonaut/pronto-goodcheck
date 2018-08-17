@@ -1,8 +1,6 @@
-# Pronto::Goodcheck
+# Pronto runner for Goodcheck
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pronto/goodcheck`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Pronto runner for [Goodcheck](https://github.com/sider/goodcheck), a regexp based customizable linter. [What is Pronto?](https://github.com/prontolabs/pronto)
 
 ## Installation
 
@@ -20,9 +18,9 @@ Or install it yourself as:
 
     $ gem install pronto-goodcheck
 
-## Usage
+## Configuration
 
-TODO: Write usage instructions here
+Configuring Goodcheck via `goodcheck.yml` will work with pronto-goodcheck.
 
 ## Development
 

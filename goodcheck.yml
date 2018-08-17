@@ -1,0 +1,4 @@
+rules:
+  - id: Spelling/GitHub
+    pattern: Github
+    message: Spell GitHub with a capital H
