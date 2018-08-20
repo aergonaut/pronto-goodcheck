@@ -20,7 +20,7 @@ module Pronto
       )
       runner.run
       analysis = JSON.load(stdout.string)
-      messages_for(analysis)
+      messages_for(Array(analysis))
     end
 
     def patches_with_changes
