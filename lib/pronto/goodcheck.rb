@@ -4,12 +4,10 @@ require "goodcheck"
 require "pathname"
 require "json"
 
-# Github
-
 module Pronto
   class GoodcheckRunner < Runner
     def run
-      files = ruby_patches.map(&:new_file_full_path)
+      files = patches_with_changes.map(&:new_file_full_path)
       stdout = StringIO.new
       stderr = StringIO.new
       reporter = ::Goodcheck::Reporters::JSON.new(stdout: stdout, stderr: stderr)
@@ -23,6 +21,12 @@ module Pronto
       runner.run
       analysis = JSON.load(stdout.string)
       messages_for(analysis)
+    end
+
+    def patches_with_changes
+      return [] unless @patches
+
+      @patches_with_changes ||= @patches.select { |patch| patch.additions > 0 }
     end
 
     def messages_for(issues)
@@ -39,7 +43,7 @@ module Pronto
     end
 
     def patch_for_issue(issue)
-      ruby_patches.find do |patch|
+      patches_with_changes.find do |patch|
         patch.new_file_full_path.to_s == issue["path"]
       end
     end
