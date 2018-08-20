@@ -16,7 +16,7 @@ module Pronto
         rules: [],
         targets: files,
         reporter: reporter,
-        stderr: $stderr
+        stderr: stderr
       )
       runner.run
       analysis = JSON.load(stdout.string)
