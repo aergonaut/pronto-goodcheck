@@ -49,7 +49,7 @@ module Pronto
     end
 
     def new_message(line, issue)
-      path = issue["path"]
+      path = line ? line.patch.delta.new_file[:path] : 'goodcheck.yml'
       message = "#{issue["message"]}"
       if issue["justifications"].any?
         justifications = ""
