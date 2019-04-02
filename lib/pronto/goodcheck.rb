@@ -7,16 +7,22 @@ require "json"
 module Pronto
   class GoodcheckRunner < Runner
     def run
-      files = patches_with_changes.map(&:new_file_full_path)
+      files = patches_with_changes
+        .map { |patch| project_relative_path(patch) }
       stdout = StringIO.new
       stderr = StringIO.new
-      reporter = ::Goodcheck::Reporters::JSON.new(stdout: stdout, stderr: stderr)
+      reporter = ::Goodcheck::Reporters::JSON.new(
+        stdout: stdout,
+        stderr: stderr,
+      )
       runner = ::Goodcheck::Commands::Check.new(
         config_path: Pathname("goodcheck.yml"),
         rules: [],
         targets: files,
         reporter: reporter,
-        stderr: stderr
+        stderr: stderr,
+        home_path: goodcheck_home_path,
+        force_download: false,
       )
       runner.run
       analysis = JSON.load(stdout.string)
@@ -44,7 +50,7 @@ module Pronto
 
     def patch_for_issue(issue)
       patches_with_changes.find do |patch|
-        patch.new_file_full_path.to_s == issue["path"]
+        patch.delta.new_file[:path].to_s == issue["path"]
       end
     end
 
@@ -60,6 +66,18 @@ module Pronto
       end
 
       Message.new(path, line, :info, message, nil, self.class)
+    end
+
+    def goodcheck_home_path
+      if (path = ENV["GOODCHECK_HOME"])
+        Pathname(path)
+      else
+        Pathname(Dir.home) + ".goodcheck"
+      end
+    end
+    
+    def project_relative_path(patch)
+      Pathname(patch.delta.new_file[:path])
     end
   end
 end
