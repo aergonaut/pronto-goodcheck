@@ -41,10 +41,16 @@ module Pronto
         next if patch.nil?
 
         line = patch.added_lines.find do |added_line|
-          issue["location"].nil? || issue["location"]["start_line"] == added_line.new_lineno
+          if issue["location"] != nil
+            issue["location"]["start_line"] == added_line.new_lineno
+          end
         end
 
-        new_message(line, issue) if line
+        if line
+          new_message(line, issue)
+        elsif issue["location"] == nil
+          new_message(nil, issue)
+        end
       end
     end
 
